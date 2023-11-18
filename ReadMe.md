@@ -14,12 +14,25 @@ AidDistribute addresses this issue by enabling organizations like Unicef to secu
 This project takes inspiration from ERC-4326 and is a modified vault version. We designed the smart contract where an owner can deposit ERC-20 tokens, and then mint ownership tokens to a list of recipients. The bearing tokens can only be transferred to a whitelisted addresses. In turn, whitelisted addresses have the opportunity to redeem the original ERC-20 tokens corresponding to their earned bearing tokens. The owner have the ability to set a daily withdrawal limits to the whitelisted addresses. 
 
 ## Deployments:
-Arbitrum Goerli: [0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://goerli.arbiscan.io/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
-Polygon zkEVM:[0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://testnet-zkevm.polygonscan.com/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
-Celesia Bubs: [0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://bubs.calderaexplorer.xyz/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
-Celo: [0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://alfajores.celoscan.io/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
-Sepolia TUSD:[0xd8bcefc4bbdb2aed29d0d9a6f4e90fd2e46d439e](https://sepolia.etherscan.io/address/)
-Sepolia Gho:[0x84cf63cdcb15acde0e07a71e4a278da9c984ee41](https://sepolia.etherscan.io/address/0x84cf63cdcb15acde0e07a71e4a278da9c984ee41)
-Scroll Sepolia:[0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://sepolia.scrollscan.dev/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
+Arbitrum Goerli [0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://goerli.arbiscan.io/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
+
+Polygon zkEVM
+[0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://testnet-zkevm.polygonscan.com/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
+
+Celesia Bubs
+[0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://bubs.calderaexplorer.xyz/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
+
+Celo
+[0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://alfajores.celoscan.io/address/0x006d0f160f2ce1c274f82006e4a9ccd8f8ff35c3)
+
+Sepolia
+[0xd8BcEFC4bBDb2aEd29d0D9A6F4e90Fd2E46D439e](https://sepolia.etherscan.io/address/0xd8BcEFC4bBDb2aEd29d0D9A6F4e90Fd2E46D439e)
+
+Sepolia with Gho
+[0x84cf63cdcb15acde0e07a71e4a278da9c984ee41](https://sepolia.etherscan.io/address/0x84cf63cdcb15acde0e07a71e4a278da9c984ee41)
+
+Scroll Sepolia[0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://sepolia.scrollscan.dev/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
+
 Linea Goerli: [0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3](https://explorer.goerli.linea.build/address/0x006D0F160f2ce1C274f82006E4A9CcD8F8Ff35c3)
-Gnosis with 2 txs [0x006d0f160f2ce1c274f82006e4a9ccd8f8ff35c3](https://gnosisscan.io/address/0x006d0f160f2ce1c274f82006e4a9ccd8f8ff35c3)
+
+Gnosis [0x006d0f160f2ce1c274f82006e4a9ccd8f8ff35c3](https://gnosisscan.io/address/0x006d0f160f2ce1c274f82006e4a9ccd8f8ff35c3)
