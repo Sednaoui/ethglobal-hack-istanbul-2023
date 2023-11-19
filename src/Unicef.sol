@@ -13,13 +13,21 @@ contract UnicefVault is ERC20 {
 
     IERC20 private immutable _asset;
     uint8 private immutable _underlyingDecimals;
-    address private immutable _owner;
+    address public immutable _owner;
+
+    address internal constant SENTINEL_REDEEMERS = address(0x1);
 
     mapping (address => uint256) public maxDailyRedeemAmount;
     mapping (address => uint256) public totalAmountRedeemedLastDay;
     mapping (address => uint256) public lastRedeem;
 
+    struct Distribution {
+        address receiver;
+        uint256 amount;
+    }
+
     event Deposit(address indexed sender, address indexed owner, uint256 amount);
+    event MaxRedeemChanged(address indexed redeemer, uint256 amount);
 
     event Withdraw(
         address indexed sender,
@@ -44,6 +52,11 @@ contract UnicefVault is ERC20 {
     error ExceededMaxWithdraw(address owner, uint256 amount, uint256 max);
 
     /**
+     * @dev Attempted to distribute more assets than the available balance.
+     */
+    error ExceededMaxDistribute(uint256 amount, uint256 max);
+
+    /**
      * @dev Attempted to redeem more shares than the max amount for `receiver`.
      */
     error ExceededMaxRedeem(address owner, uint256 amount, uint256 max);
@@ -51,8 +64,8 @@ contract UnicefVault is ERC20 {
     /**
      * @dev Set the underlying asset contract. This must be an ERC20-compatible contract (ERC20 or ERC777).
      */
-    constructor(string memory name, string memory sympol, IERC20 asset_, address owner) 
-    ERC20(name, sympol){
+    constructor(string memory name, string memory symbol, IERC20 asset_, address owner) 
+    ERC20(name, symbol){
         (bool success, uint8 assetDecimals) = _tryGetAssetDecimals(asset_);
         _underlyingDecimals = success ? assetDecimals : 18;
         _asset = asset_;
@@ -109,21 +122,42 @@ contract UnicefVault is ERC20 {
     }
 
     function deposit(uint256 amount) public virtual {
-        uint256 maxAmount = maxDeposit(_owner);
+        uint256 maxAmount = maxDeposit(address(this));
         if (amount > maxAmount) {
-            revert ExceededMaxDeposit(_owner, amount, maxAmount);
+            revert ExceededMaxDeposit(address(this), amount, maxAmount);
         }
 
-        _deposit(_msgSender(), _owner, amount);
+        _deposit(_msgSender(), address(this), amount);
     }
 
-    function mint(uint256 amount, address receiver) public virtual {
-        uint256 maxAmount = maxMint(receiver);
-        if (amount > maxAmount) {
-            revert ExceededMaxMint(receiver, amount, maxAmount);
+    function distribute(address receiver, uint256 amount) public virtual {
+        if(_msgSender() != _owner){
+            revert NotTheOwner(_msgSender());
         }
+        uint256 maxDistribution = balanceOf(address(this));
+        if (amount > maxDistribution){
+            revert ExceededMaxDistribute(amount, maxDistribution);
+        }
+        _distribute(receiver, amount);
+    }
 
-        _deposit(_msgSender(), receiver, amount);
+    function batchDistribute(Distribution[] calldata distributions) public virtual {
+        if(_msgSender() != _owner){
+            revert NotTheOwner(_msgSender());
+        }
+        uint256 maxDistribution = balanceOf(address(this));
+        uint256 totalDistribution = 0;
+        for (uint256 i = 0; i < distributions.length; i++) {
+            Distribution memory distribution = distributions[i];
+            totalDistribution = totalDistribution + distribution.amount;
+        }
+        if (totalDistribution > maxDistribution){
+            revert ExceededMaxDistribute(totalDistribution, maxDistribution);
+        }
+        for (uint256 i = 0; i < distributions.length; i++) {
+            Distribution memory distribution = distributions[i];
+            _distribute(distribution.receiver, distribution.amount);
+        }
     }
 
     function withdraw(uint256 amount, address receiver, address owner) public virtual {
@@ -152,11 +186,12 @@ contract UnicefVault is ERC20 {
 
     error NotTheOwner(address notTheOwner);
     
-    function setMaxDailyRedeemAmount(address redeemer, uint256 maxAmount) public{
+    function setMaxDailyRedeemAmount(address redeemer, uint256 maxAmount) public {
         if(_msgSender() != _owner){
             revert NotTheOwner(_msgSender());
         }
         maxDailyRedeemAmount[redeemer] = maxAmount;
+        emit MaxRedeemChanged(redeemer, maxAmount);
     }
 
 
@@ -230,5 +265,9 @@ contract UnicefVault is ERC20 {
             revert ERC20InvalidReceiver(address(to));
         }
         _update(from, to, value);
+    }
+
+    function _distribute(address receiver, uint256 amount) internal virtual {
+        _update(address(this), receiver, amount);
     }
 }
